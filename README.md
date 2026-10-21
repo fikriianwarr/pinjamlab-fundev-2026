@@ -29,6 +29,10 @@ These are fictional demonstration accounts, unrelated to the team's real identit
 ## Features
 
 - Date-specific inventory search, categories and available-only filtering.
+- Seven-day availability planner using server-calculated daily inventory, category filters, week navigation and direct request entry.
+- Keyboard command search (Ctrl/Cmd K or /) across names, codes, categories and tags.
+- Four-stage loan journey: requested, approved, collected and returned; equipment readiness remains a separate care record.
+- Detailed native SVG equipment illustrations, motion tied to page entry and interactions, and a persistent reduced-motion preference that respects the operating system.
 - Learner registration and sign-in; personal borrowing records and request cancellation.
 - One-to-seven-day requests with quantities, learning purpose and duplicate detection.
 - Staff review ordered by fewer completed loans in the previous 30 days, then request time. Staff makes the final decision; the order is a transparent review aid.
@@ -61,6 +65,14 @@ For every requested day, the server counts concurrent approved quantities and ch
 
 On-time returns compare the recorded Jakarta return date with the agreed return date. Environmental savings are not inferred from this metric.
 
+## Interface release 2.0
+
+The weekly planner checks seven consecutive days beginning within the next 84 days, so every displayed day can be used inside the booking horizon. Each cell covers one day; a longer request is checked again over its complete period. Available cells open the selected equipment/date. Staff still makes the final allocation decision. The catalogue and the planner share the same server availability rules.
+
+Use **Ctrl/Cmd K** or **/** for quick search, **Tab/Enter** to operate its results and **Escape** to close dialogs or the navigation drawer. The **Motion** control reduces visual movement and saves that preference locally; the operating system's reduced-motion setting is always honoured. Responsive navigation includes a close control, scrim and Escape dismissal.
+
+The equipment objects are purpose-made SVG illustrations, rather than photographs of actual university inventory. The hero illustration is also illustrative. All metrics and counts continue to come from workspace records.
+
 ## Verification
 
 ```sh
@@ -69,7 +81,7 @@ npm test
 node manage.mjs check
 ```
 
-**37 automated tests pass** on Node 24.19.0 in the packaged verification run. The suite launches real HTTP servers against separate temporary SQLite databases. It checks CSRF/origin enforcement, role permissions, cross-account restrictions, competing parallel approvals, booking boundaries, maintenance holds, repeat transitions, notification persistence, scoped exports, production bootstrap and consistent backups. It also covers the Jakarta/UTC return-date boundary. Temporary test databases are removed after the run. See `docs/test-results.txt` for the full measured output.
+**40 automated tests pass** on Node 24.19.0 in the packaged verification run. The suite launches real HTTP servers against separate temporary SQLite databases. It checks CSRF/origin enforcement, role permissions, cross-account restrictions, competing parallel approvals, booking boundaries, maintenance holds, repeat transitions, notification persistence, scoped exports, production bootstrap and consistent backups. It also covers the Jakarta/UTC return-date boundary. Temporary test databases are removed after the run. See `docs/test-results.txt` for the full measured output.
 
 Browser verification and its scope are recorded separately in the packaged QA report. A passing test suite does not establish that every device or deployment environment has been tested.
 
@@ -92,7 +104,8 @@ Native HTML, CSS and JavaScript provide the frontend. The server uses Node's bui
 | `db.mjs` | Schema setup, scrypt passwords, sample records and peak occupancy |
 | `schema.sql` | Constraints, foreign keys and persistent tables |
 | `public/app.js` | Browser interface and API calls |
-| `public/style.css` | Responsive visual system and motion preferences |
+| `public/style.css`, `public/experience.css` | Responsive visual system, illustrated surfaces and motion preferences |
+| `public/assets/equipment-collection.svg` | Twelve native vector equipment illustrations |
 | `manage.mjs` | Local staff bootstrap, backups and integrity checks |
 | `tests/` | Domain, integration and production checks |
 
@@ -105,6 +118,7 @@ Native HTML, CSS and JavaScript provide the frontend. The server uses Node's bui
 | POST `/api/auth/login`, `/register`, `/logout` | Session + CSRF | Authentication; registration creates learners only |
 | POST `/api/auth/demo` | Sample + CSRF | Fictional learner/staff sign-in |
 | GET `/api/bootstrap` | Signed in | Role-scoped workspace |
+| GET `/api/availability?from=YYYY-MM-DD` | Signed in | Seven daily aggregate availability values per equipment type; no borrower records |
 | GET `/api/assets`, `/api/assets/:id` | Signed in | Dated availability and care history |
 | POST `/api/assets` | Staff | Add equipment |
 | POST `/api/loans` | Learner | Request equipment |
