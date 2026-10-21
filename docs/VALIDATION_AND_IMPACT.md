@@ -13,9 +13,15 @@ The submission contains working software and an illustrative workspace. Technica
 |---|---|---|---|
 | 4.3: access to quality technical, vocational and tertiary education | A searchable catalogue, date requests, transparent request status and an explainable access-review queue help arrange access to learning tools. | Demonstrated workflow; persistent request and loan records; checks of permissions and allocation behavior. | Observe whether users can complete requests, obtain suitable equipment and participate in practical learning. Study which learners still face barriers. |
 | 12.2: efficient use of natural resources | Share an existing stock and inspect recorded availability rather than treating every need as a new purchase. | Asset quantities, dated reservations and database-derived activity summaries. | A defined observation period with asset availability and actual use denominators; procurement records if making a purchasing claim. |
-| 12.5: waste prevention, reduction and reuse | Record return condition, block affected equipment for care, record a resolution and make later use traceable. | Condition and maintenance workflow; records associated with an asset. | Verified repair and subsequent use; disposal records and a defensible comparison before claiming waste avoided. |
+| 12.5: waste prevention, reduction and reuse | Record return condition, block affected equipment for care, record a resolution and make later use traceable. | Condition and maintenance workflow; quantities and events linked to an equipment-type record. | Verified repair and subsequent use; disposal records and a defensible comparison before claiming waste avoided. |
 
 The mapping describes contribution pathways. It does not claim that this local application measures the UN's national SDG indicators. A completed loan is not a unit of carbon reduction, and a maintenance record is not proof that an item would otherwise have been discarded.
+
+## Inventory granularity and what can be proved
+
+The current schema records an equipment type, its total quantity and maintenance quantity. Loans and maintenance events refer to `asset_id`; an individual physical unit has no separate serial identifier. A hold therefore removes the affected quantity from that type's available stock, and a resolution releases that quantity once. This behavior is testable in the supplied application.
+
+A later loan with the same `asset_id` demonstrates further recorded borrowing of that equipment type. It cannot establish that the exact device repaired was the device borrowed next. If the pilot evaluates physical-unit reuse, staff must use a separate unit-identification log that links the return, repair, release and later handover, or implement and validate individual-unit tracking first. Record this distinction in any impact report.
 
 ## Proposed supervised pilot
 
@@ -51,7 +57,8 @@ Use a sandbox for conflict, damage and maintenance scenarios. Do not invent real
 | Approval conflict | A confirmed allocation that exceeds capacity for any relevant date or overlaps an unavailable unit. | Separate prevented attempts from conflicts that actually occurred. |
 | Return timeliness | Completed loans returned on or before their recorded due date divided by completed loans with a verifiable return date. | State the date convention and exclude or explain missing return records. |
 | Recorded equipment use | Completed loans, distinct borrowers and periods of recorded use. | True utilization requires a defined available-time denominator; do not rename a loan count utilization. |
-| Use after care | An asset with a documented maintenance resolution and a later authorized completed loan. | Verify the records refer to the same asset and time order. This does not quantify avoided waste. |
+| Type-level borrowing after care | An equipment type with a documented maintenance resolution and a later authorized completed loan. | Verify the shared asset_id and event order. This establishes later borrowing from the same equipment type, not reuse of the same physical unit. |
+| Confirmed physical-unit reuse | A separately identified unit has an inspection or repair record and a later authorized use linked to that same unit identifier. | A pilot unit log or serial-level extension is required; the current application has no individual-unit identifier. This still does not quantify avoided waste. |
 | Clarity | A short post-task rating plus the participant's explanation of availability, status and queue reasons. | Quote only with consent and report negative feedback as well as positive feedback. |
 
 ## Observation record
