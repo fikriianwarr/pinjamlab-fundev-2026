@@ -1,0 +1,13 @@
+PRAGMA journal_mode=WAL;
+PRAGMA foreign_keys=ON;
+PRAGMA busy_timeout=5000;
+CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY,email TEXT UNIQUE COLLATE NOCASE NOT NULL,name TEXT NOT NULL,student_id TEXT NOT NULL DEFAULT '',role TEXT NOT NULL CHECK(role IN ('student','staff')),password_hash TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS assets(id INTEGER PRIMARY KEY,code TEXT UNIQUE NOT NULL,name TEXT NOT NULL,category TEXT NOT NULL,description TEXT NOT NULL,location TEXT NOT NULL,icon TEXT NOT NULL,total INTEGER NOT NULL CHECK(total>0),maintenance INTEGER NOT NULL DEFAULT 0 CHECK(maintenance>=0 AND maintenance<=total),tags TEXT NOT NULL DEFAULT '[]');
+CREATE TABLE IF NOT EXISTS loans(id INTEGER PRIMARY KEY,user_id INTEGER NOT NULL REFERENCES users(id),asset_id INTEGER NOT NULL REFERENCES assets(id),quantity INTEGER NOT NULL CHECK(quantity BETWEEN 1 AND 20),starts_on TEXT NOT NULL,ends_on TEXT NOT NULL,purpose TEXT NOT NULL,status TEXT NOT NULL CHECK(status IN ('pending','approved','checked_out','returned','rejected','cancelled')),created_at TEXT NOT NULL,approved_at TEXT,checked_out_at TEXT,returned_at TEXT,return_condition TEXT CHECK(return_condition IS NULL OR return_condition IN ('good','repair','retire')),return_notes TEXT NOT NULL DEFAULT '',decision_note TEXT NOT NULL DEFAULT '',CHECK(ends_on>starts_on));
+CREATE TABLE IF NOT EXISTS maintenance(id INTEGER PRIMARY KEY,asset_id INTEGER NOT NULL REFERENCES assets(id),loan_id INTEGER REFERENCES loans(id),quantity INTEGER NOT NULL CHECK(quantity>0),status TEXT NOT NULL CHECK(status IN ('open','resolved')),note TEXT NOT NULL,created_at TEXT NOT NULL,resolved_at TEXT,resolution TEXT);
+CREATE TABLE IF NOT EXISTS events(id INTEGER PRIMARY KEY,actor_id INTEGER REFERENCES users(id),entity_type TEXT NOT NULL,entity_id INTEGER NOT NULL,action TEXT NOT NULL,detail TEXT NOT NULL,created_at TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS notifications(id INTEGER PRIMARY KEY,user_id INTEGER NOT NULL REFERENCES users(id),title TEXT NOT NULL,body TEXT NOT NULL,created_at TEXT NOT NULL,read_at TEXT);
+CREATE TABLE IF NOT EXISTS sessions(token_hash TEXT PRIMARY KEY,user_id INTEGER REFERENCES users(id),csrf TEXT NOT NULL,expires_at INTEGER NOT NULL);
+CREATE INDEX IF NOT EXISTS loans_asset_dates ON loans(asset_id,status,starts_on,ends_on);
+CREATE INDEX IF NOT EXISTS loans_user ON loans(user_id,created_at);
+CREATE INDEX IF NOT EXISTS events_entity ON events(entity_type,entity_id);
