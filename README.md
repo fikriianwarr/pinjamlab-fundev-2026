@@ -6,7 +6,7 @@
 FunDev International Competition 2026 · Web Development  
 **KEBAS (Keluarga Bebas)** · Universitas Mikroskil · Indonesia
 
-[Watch the 3:30 English-captioned demo](https://drive.google.com/file/d/186kJ-KZZsEFrTM5ohyM9NTE-4W9wUyE7/view?pli=1) · [Run locally](#run-locally) · [Judge walkthrough](#judge-walkthrough) · [Verification](#verification) · [SDG evidence](#sdg-contribution-and-validation)
+[Watch the 3:30 English-captioned demo](https://drive.google.com/file/d/186kJ-KZZsEFrTM5ohyM9NTE-4W9wUyE7/view?pli=1) · [Run locally](#run-locally) · [Judge walkthrough](#judge-walkthrough) · [Verification](#verification) · [Judge evidence](docs/JUDGE_EVIDENCE.md) · [SDG evidence](#sdg-contribution-and-validation)
 
 PinjamLab helps learners find shared equipment, plan a borrowing period and follow a request through its return. Laboratory staff can review access, confirm current capacity and keep equipment under care until an inspection is recorded. Discovery, allocation and condition stay connected to the same persistent records.
 
@@ -125,13 +125,17 @@ The checked runtime is native Node. Docker configuration is included but was not
 - Collected units remain unavailable, including for later dates, until an actual return is recorded. This conservative rule avoids promising equipment whose return is unconfirmed.
 - Staff approval rechecks current capacity in a database transaction. Catalogue and planner counts help planning; they do not guarantee allocation.
 
+### What an inventory record identifies
+
+Each asset code identifies an **equipment type and stock quantity**. Loan and care events refer to that type; individual units have no separate serial identifier. A hold reduces the affected quantity and a resolution releases it once. A later loan of the same type does not by itself prove reuse of the exact repaired device. That measurement needs a pilot unit log or a validated serial-level extension.
+
 ## SDG contribution and validation
 
 | Target | Application mechanism | Evidence available | Next measurement |
 |---|---|---|---|
 | **SDG 4.3** — access to technical and tertiary learning | Equipment discovery, planned requests and visible status | Working access workflow and persistent loan records | Request completion, suitable handovers and remaining access barriers |
 | **SDG 12.2** — resource efficiency | Share existing stock and inspect dated availability | Inventory and recorded borrowing activity | Recorded use with an available-time denominator; procurement data for purchase claims |
-| **SDG 12.5** — prevention and reuse | Condition return, inspection hold and recorded release | Traceable care records | Verified repair followed by later authorized use |
+| **SDG 12.5** — prevention and reuse | Condition return, inspection hold and recorded release | Traceable care quantities and events by equipment type | Later borrowing by type; a unit-identification log is needed to establish reuse of the exact device |
 
 These are contribution pathways. A completed loan does not establish emissions avoided, and a maintenance record alone does not establish waste prevented.
 
@@ -240,6 +244,9 @@ Restore only after stopping the app, keeping the existing database safely and re
 </details>
 
 ## How the submission addresses the rubric
+
+[Open the judge evidence map](docs/JUDGE_EVIDENCE.md) for exact source links, test names, video chapters and slide references for each criterion.
+
 
 | Official criterion | Weight | Concrete evidence in this project |
 |---|---:|---|
