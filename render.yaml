@@ -1,0 +1,21 @@
+# PinjamLab FunDev 2026 — public demonstration only.
+# Free Render filesystem is ephemeral; SQLite records may reset after restarts.
+services:
+  - type: web
+    name: pinjamlab-kebas-fundev-2026
+    runtime: node
+    plan: free
+    region: singapore
+    branch: main
+    buildCommand: npm run check && npm test
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: 22.16.0
+      - key: HOST
+        value: 0.0.0.0
+      - key: PINJAMLAB_MODE
+        value: sample
+      - key: PINJAMLAB_COOKIE_SECURE
+        value: "1"
